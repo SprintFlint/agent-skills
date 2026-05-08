@@ -1,20 +1,24 @@
 # SprintFlint Agent Skills
 
-Agent skills for interacting with SprintFlint through the REST API. Works with Cursor, Claude Code, and other AI assistants that support agent skills.
+Two ways to give an AI assistant access to your SprintFlint workspace.
 
-## Quick Start
+## Option 1: MCP server (recommended)
 
-### 1. Get Your API Token
+SprintFlint hosts a public MCP server at `mcp.sprintflint.com` — eight day-one tools (`list-projects`, `list-sprints`, `list-issues`, `my-issues`, plus issue/comment write tools).
 
-1. Log in to [SprintFlint](https://sprintflint.com)
-2. Click your avatar → "My Profile"
-3. Scroll to "API Token" section
-4. Click "Generate Token"
-5. Copy and save your token securely
+**Setup:** copy the JSON config block from [sprintflint.com/mcp](https://sprintflint.com/mcp) into Claude Desktop, Cursor, or Zed. For Claude Code, use `claude mcp add` with the snippet on the same page.
 
-### 2. Set Up Environment Variable
+**Auth:** bearer token — same token as the REST API. Generate one from [SprintFlint](https://sprintflint.com) → "My Profile" → "API Token".
 
-Add your token to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.):
+## Option 2: REST API skill (this repo)
+
+For agents that don't speak MCP. The skill in [SKILL.md](SKILL.md) wraps the REST API directly.
+
+### 1. Get your API token
+
+[SprintFlint](https://sprintflint.com) → "My Profile" → "API Token" → "Generate Token".
+
+### 2. Set your token as an env var
 
 ```bash
 export SPRINTFLINT_API_TOKEN="your-token-here"
@@ -26,15 +30,13 @@ Or add to your project's `.env` file:
 SPRINTFLINT_API_TOKEN=your-token-here
 ```
 
-### 3. Install the Skill
+### 3. Point your agent at the skill
 
-```bash
-npx skills add Ancez/sprintflint-skills
-```
+Reference [SKILL.md](SKILL.md) from your agent's skill loader (Cursor, Claude Code, or any agent runtime that supports markdown skill files). It documents the endpoints the agent should call.
 
 ## Usage
 
-Once installed, ask your AI assistant to use SprintFlint:
+With either option configured, ask your assistant things like:
 
 ```
 List my SprintFlint projects
@@ -52,21 +54,15 @@ Update issue SF-42 status to done
 Add a comment to SF-42: "Completed the refactor"
 ```
 
-The AI will use the skill to make API calls with your token.
+## API base URL
 
-## Available Skills
-
-- **[SKILL.md](SKILL.md)** - Complete API reference for managing projects, sprints, issues, and comments
-
-## API Base URL
-
-- Production: `https://sprintflint.com/api/v1`
+`https://sprintflint.com/api/v1`
 
 ## Security
 
-- Never commit your API token to version control
-- Use environment variables or secret management
-- Your token has the same permissions as your account
+- Never commit your API token to version control.
+- Use environment variables or a secret manager.
+- The token has the same permissions as your account.
 
 ## License
 
